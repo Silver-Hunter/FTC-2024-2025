@@ -123,6 +123,7 @@ public class IMUFieldCentric extends LinearOpMode {
                 backRightPower  /= max;
             }
 
+
             frontLeftDrive.setPower(Math.pow(frontLeftPower, 3));
             frontRightDrive.setPower(Math.pow(frontRightPower, 3));
             backLeftDrive.setPower(Math.pow(backLeftPower, 3));
