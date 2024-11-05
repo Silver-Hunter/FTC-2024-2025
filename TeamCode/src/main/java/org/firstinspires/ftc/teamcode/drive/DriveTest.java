@@ -3,16 +3,17 @@ package org.firstinspires.ftc.teamcode.drive;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 /*
  * 1) Axial:    Driving forward and backward               Left-joystick Forward/Backward
  * 2) Lateral:  Strafing right and left                     Left-joystick Right and Left
  * 3) Yaw:      Rotating Clockwise and counter clockwise    Right-joystick Right and Left
+
  */
 
-@TeleOp(name="Driver Control (NEW)", group="Linear OpMode")
+@TeleOp(name="Driver Control", group="Linear OpMode")
 
 public class DriveTest extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
@@ -21,9 +22,12 @@ public class DriveTest extends LinearOpMode {
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
     private DcMotor guideRailMotor = null;
+    private DcMotor linearSlide = null;
     double ticks = 537.6;
     double newTarget;
     private Servo Claw = null;
+    private Servo Wrist = null;
+
 
     @Override
     public void runOpMode() {
@@ -35,13 +39,15 @@ public class DriveTest extends LinearOpMode {
         backLeftDrive = hardwareMap.get(DcMotor.class, "backLeftDrive");
         backRightDrive = hardwareMap.get(DcMotor.class, "backRightDrive");
         guideRailMotor = hardwareMap.get(DcMotor.class, "guideRailMotor");
+        linearSlide = hardwareMap.get(DcMotor.class, "liftMotor");
         Claw = hardwareMap.get(Servo.class, "Claw");
+        Wrist = hardwareMap.get(Servo.class, "Wrist");
 
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
+        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         guideRailMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -75,7 +81,7 @@ public class DriveTest extends LinearOpMode {
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
             double leftFrontPower  = axial + lateral + yaw;
-            double rightFrontPower = axial - lateral - yaw;
+            double rightFrontPower = (axial + 0.15) - lateral - yaw;
             double leftBackPower   = axial - lateral + yaw;
             double rightBackPower  = axial + lateral - yaw;
 
@@ -100,24 +106,44 @@ public class DriveTest extends LinearOpMode {
             if (gamepad2.x){
                 Claw.setPosition(0);
             }
+
+            if (gamepad2.a){
+                Wrist.setPosition(1);
+            }
+
             if (gamepad2.y){
+                Wrist.setPosition(0);
+            }
+
+            if (gamepad2.b){
                 Claw.setPosition(1);
             }
 
-            if (gamepad1.dpad_up){
-                encoder(5);
+            if (gamepad2.dpad_up){
+                encoder(4);
             }
 
-            if (gamepad1.dpad_down){
-                encoder(-5);
+            if (gamepad2.dpad_down){
+                encoder(-4);
+            }
+
+            linearSlide.setPower(gamepad2.left_stick_y);
+
+            if (linearSlide.getCurrentPosition() > 1000 || linearSlide.getCurrentPosition() > -1000){
+                linearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             }
 
 
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Linear Slide Ticks: ", + ticks);
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.update();
+        }
+
+        if (linearSlide.getCurrentPosition() > 3300){
+            linearSlide.setPower(0);
         }
     }
 
@@ -125,7 +151,7 @@ public class DriveTest extends LinearOpMode {
         guideRailMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         newTarget = ticks/turnage;
         guideRailMotor.setTargetPosition((int)newTarget);
-        guideRailMotor.setPower(0.1);
+        guideRailMotor.setPower(0.5);
         guideRailMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }
