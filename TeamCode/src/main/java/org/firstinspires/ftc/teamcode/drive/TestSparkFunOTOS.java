@@ -39,9 +39,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
-@Autonomous(name="Rain Bot Auto", group="Robot")
+@Autonomous(name="TestSparkFunOTOS", group="Robot")
 
-public class RainBotAuto extends LinearOpMode {
+public class TestSparkFunOTOS extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
@@ -88,17 +88,7 @@ public class RainBotAuto extends LinearOpMode {
         configureOtos();
 
         // Wait for the start button to be pressed
-        SparkFunOTOS.Pose2D WP1 = new SparkFunOTOS.Pose2D(0,27.5,0);
-        SparkFunOTOS.Pose2D WP2 = new SparkFunOTOS.Pose2D(-4,27.5,0);
-        SparkFunOTOS.Pose2D WP3 = new SparkFunOTOS.Pose2D(-7,6.2,0);
-        SparkFunOTOS.Pose2D WP4 = new SparkFunOTOS.Pose2D(-7,27.5,0);
-        SparkFunOTOS.Pose2D WP5 = new SparkFunOTOS.Pose2D(-9,27.5,0);
-        SparkFunOTOS.Pose2D WP6 = new SparkFunOTOS.Pose2D(-9,7,0);
-        SparkFunOTOS.Pose2D WP7 = new SparkFunOTOS.Pose2D(-9,27.5,0);
-        SparkFunOTOS.Pose2D WP8 = new SparkFunOTOS.Pose2D(-10.5,27.5,0);
-        SparkFunOTOS.Pose2D WP9 = new SparkFunOTOS.Pose2D(-10.5,8.9,0);
-        SparkFunOTOS.Pose2D WP10 = new SparkFunOTOS.Pose2D(-17.4,27.5,0);
-        SparkFunOTOS.Pose2D WP11 = new SparkFunOTOS.Pose2D(-4,27.5,0);
+
 
 
         waitForStart();
@@ -107,80 +97,7 @@ public class RainBotAuto extends LinearOpMode {
         while (opModeIsActive()) {
             SparkFunOTOS.Pose2D pos = myOtos.getPosition();
 
-            while (pos.y < WP1.y ) {
-                moveForward();
-                telemetry.addData("X coordinate", pos.x);
-                telemetry.addData("Y coordinate", pos.y);
-                telemetry.addData("Heading angle", pos.h);
-                telemetry.addData("Target X coordinate", WP1.x);
-                telemetry.addData("TargetY coordinate", WP1.y);
-                telemetry.addData("Target Heading angle", WP1.h);
-                telemetry.update();
-                pos = myOtos.getPosition();
-            }
-            moveStop();
-            while (pos.x > WP2.x ) {
-                moveLeft();
-                telemetry.addData("X coordinate", pos.x);
-                telemetry.addData("Y coordinate", pos.y);
-                telemetry.addData("Heading angle", pos.h);
-                telemetry.addData("Target X coordinate", WP1.x);
-                telemetry.addData("TargetY coordinate", WP1.y);
-                telemetry.addData("Target Heading angle", WP1.h);
-                telemetry.update();
-                pos = myOtos.getPosition();
-            }
-            moveStop();
-            while (pos.y > WP3.y ) {
-                moveBackward();
-                telemetry.addData("X coordinate", pos.x);
-                telemetry.addData("Y coordinate", pos.y);
-                telemetry.addData("Heading angle", pos.h);
-                telemetry.addData("Target X coordinate", WP1.x);
-                telemetry.addData("TargetY coordinate", WP1.y);
-                telemetry.addData("Target Heading angle", WP1.h);
-                telemetry.update();
-                pos = myOtos.getPosition();
-            }
-            moveStop();
-            while (pos.y < WP4.y ) {
-                moveForward();
-                telemetry.addData("X coordinate", pos.x);
-                telemetry.addData("Y coordinate", pos.y);
-                telemetry.addData("Heading angle", pos.h);
-                telemetry.addData("Target X coordinate", WP1.x);
-                telemetry.addData("TargetY coordinate", WP1.y);
-                telemetry.addData("Target Heading angle", WP1.h);
-                telemetry.update();
-                pos = myOtos.getPosition();
-            }
-            moveStop();
-            while (pos.x > WP5.x ) {
-                moveLeft();
-                telemetry.addData("X coordinate", pos.x);
-                telemetry.addData("Y coordinate", pos.y);
-                telemetry.addData("Heading angle", pos.h);
-                telemetry.addData("Target X coordinate", WP1.x);
-                telemetry.addData("TargetY coordinate", WP1.y);
-                telemetry.addData("Target Heading angle", WP1.h);
-                telemetry.update();
-                pos = myOtos.getPosition();
-            }
-            moveStop();
-            while (pos.y > WP6.y ) {
-                moveBackward();
-                telemetry.addData("X coordinate", pos.x);
-                telemetry.addData("Y coordinate", pos.y);
-                telemetry.addData("Heading angle", pos.h);
-                telemetry.addData("Target X coordinate", WP1.x);
-                telemetry.addData("TargetY coordinate", WP1.y);
-                telemetry.addData("Target Heading angle", WP1.h);
-                telemetry.update();
-                pos = myOtos.getPosition();
-            }
-            moveStop();
-//
-//            moveStop();
+
             if (gamepad1.y) {
                 myOtos.resetTracking();
             }
@@ -198,9 +115,7 @@ public class RainBotAuto extends LinearOpMode {
             telemetry.addData("X coordinate", pos.x);
             telemetry.addData("Y coordinate", pos.y);
             telemetry.addData("Heading angle", pos.h);
-            telemetry.addData("Target X coordinate", WP1.x);
-            telemetry.addData("TargetY coordinate", WP1.y);
-            telemetry.addData("Target Heading angle", WP1.h);
+
 
             // Update the telemetry on the driver station
             telemetry.update();

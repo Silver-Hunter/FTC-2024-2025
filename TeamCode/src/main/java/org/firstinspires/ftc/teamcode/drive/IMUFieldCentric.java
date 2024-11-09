@@ -63,7 +63,7 @@ public class IMUFieldCentric extends LinearOpMode {
 
     @Override public void runOpMode() throws InterruptedException {
         imu = hardwareMap.get(IMU.class, "imu");
-        logoFacingDirectionPosition = 4; // right
+        logoFacingDirectionPosition = 3; // right
         usbFacingDirectionPosition = 0; // Up
 
         frontLeftDrive = hardwareMap.get(DcMotor.class, "frontLeftDrive");
@@ -131,7 +131,6 @@ public class IMUFieldCentric extends LinearOpMode {
 
 
             // Loop until stop requested
-        while (!isStopRequested()) {
 
             // Check to see if Yaw reset is requested (Y button)
             if (gamepad1.y) {
@@ -208,7 +207,6 @@ public class IMUFieldCentric extends LinearOpMode {
 
     // apply any requested orientation changes.
 
-    }
 
     private void updateOrientation() {
         RevHubOrientationOnRobot.LogoFacingDirection logo = logoFacingDirections[logoFacingDirectionPosition];
