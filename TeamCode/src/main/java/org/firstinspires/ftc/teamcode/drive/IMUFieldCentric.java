@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -55,6 +56,13 @@ public class IMUFieldCentric extends LinearOpMode {
     private DcMotor frontRightDrive = null;
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
+    private Servo Claw = null;
+    private Servo Wrist = null;
+    private DcMotor guideRailMotor = null;
+    private DcMotor linearSlide = null;
+    double newTarget;
+    double ticks = 537.6;
+
 
     IMU imu;
     int logoFacingDirectionPosition;
@@ -63,13 +71,17 @@ public class IMUFieldCentric extends LinearOpMode {
 
     @Override public void runOpMode() throws InterruptedException {
         imu = hardwareMap.get(IMU.class, "imu");
-        logoFacingDirectionPosition = 3; // right
+        logoFacingDirectionPosition = 3;
         usbFacingDirectionPosition = 0; // Up
 
         frontLeftDrive = hardwareMap.get(DcMotor.class, "frontLeftDrive");
         frontRightDrive = hardwareMap.get(DcMotor.class, "frontRightDrive");
         backLeftDrive = hardwareMap.get(DcMotor.class, "backLeftDrive");
         backRightDrive = hardwareMap.get(DcMotor.class, "backRightDrive");
+        guideRailMotor = hardwareMap.get(DcMotor.class, "guideRailMotor");
+        linearSlide = hardwareMap.get(DcMotor.class, "liftMotor");
+        Claw = hardwareMap.get(Servo.class, "Claw");
+        Wrist = hardwareMap.get(Servo.class, "Wrist");
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -128,6 +140,37 @@ public class IMUFieldCentric extends LinearOpMode {
             frontRightDrive.setPower(Math.pow(frontRightPower, 3));
             backLeftDrive.setPower(Math.pow(backLeftPower, 3));
             backRightDrive.setPower(Math.pow(backRightPower, 3));
+
+            if (gamepad2.x){
+                Claw.setPosition(0);
+            }
+
+            if (gamepad2.a){
+                Wrist.setPosition(1);
+            }
+
+            if (gamepad2.y){
+                Wrist.setPosition(0);
+            }
+
+            if (gamepad2.b){
+                Claw.setPosition(1);
+            }
+
+            if (gamepad2.dpad_up){
+                encoder(4);
+            }
+
+            if (gamepad2.dpad_down){
+                encoder(-4);
+            }
+
+            linearSlide.setPower(gamepad2.left_stick_y);
+
+            if (linearSlide.getCurrentPosition() > 1000 || linearSlide.getCurrentPosition() > -1000){
+                linearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            }
+
 
 
             // Loop until stop requested
@@ -205,6 +248,13 @@ public class IMUFieldCentric extends LinearOpMode {
         }
     }
 
+    private void encoder(int turnage) {
+        guideRailMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        newTarget = ticks/turnage;
+        guideRailMotor.setTargetPosition((int)newTarget);
+        guideRailMotor.setPower(0.5);
+        guideRailMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
     // apply any requested orientation changes.
 
 
