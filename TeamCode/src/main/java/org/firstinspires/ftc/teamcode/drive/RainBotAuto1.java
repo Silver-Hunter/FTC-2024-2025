@@ -86,10 +86,10 @@ public class RainBotAuto1 extends LinearOpMode {
 
         // Wait for the start button to be pressed
         SparkFunOTOS.Pose2D WP1 = new SparkFunOTOS.Pose2D(0,-44.7,0);
-        SparkFunOTOS.Pose2D WP2 = new SparkFunOTOS.Pose2D(9.5,-44.7,0);
-        SparkFunOTOS.Pose2D WP3 = new SparkFunOTOS.Pose2D(9.5,-7.1,0);
-        SparkFunOTOS.Pose2D WP4 = new SparkFunOTOS.Pose2D(9.5,-8,0);
-        SparkFunOTOS.Pose2D WP5 = new SparkFunOTOS.Pose2D(-59,-8,0);
+        SparkFunOTOS.Pose2D WP2 = new SparkFunOTOS.Pose2D(8,-44.7,0);
+        SparkFunOTOS.Pose2D WP3 = new SparkFunOTOS.Pose2D(8,-7.1,0);
+        SparkFunOTOS.Pose2D WP4 = new SparkFunOTOS.Pose2D(8,-44.6,0);
+        SparkFunOTOS.Pose2D WP5 = new SparkFunOTOS.Pose2D(12,-44.6,0);
 
 
 
@@ -151,8 +151,8 @@ public class RainBotAuto1 extends LinearOpMode {
             }
             moveStop();
 
-            while (pos.x > WP5.x ) {
-                moveRight();
+            while (pos.x < WP5.x ) {
+                moveLeft();
                 telemetry.addData("X coordinate", pos.x);
                 telemetry.addData("Y coordinate", pos.y);
                 telemetry.addData("Heading angle", pos.h);
@@ -219,7 +219,7 @@ public class RainBotAuto1 extends LinearOpMode {
         backRightDrive.setPower(MAX_AUTO_STRAFE);
     }
     public void moveLeft() {
-        frontLeftDrive.setPower(-MAX_AUTO_STRAFE);
+        frontLeftDrive.setPower(-MAX_AUTO_STRAFE + 0.05);
         frontRightDrive.setPower(MAX_AUTO_STRAFE);
         backLeftDrive.setPower(MAX_AUTO_STRAFE);
         backRightDrive.setPower(-MAX_AUTO_STRAFE);
