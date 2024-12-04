@@ -24,6 +24,11 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 public class ArmTouchSensor extends LinearOpMode {
     TouchSensor touchSensor;  // Touch sensor Object
     private DcMotor linearSlide = null;
+    private DcMotor guideRailMotor = null;
+    double ticks;
+    double newTarget;
+
+
 
 
     @Override
@@ -32,6 +37,17 @@ public class ArmTouchSensor extends LinearOpMode {
         // get a reference to our touchSensor object.
         touchSensor = hardwareMap.get(TouchSensor.class, "TouchSensor");
         linearSlide = hardwareMap.get(DcMotor.class, "liftMotor");
+        guideRailMotor = hardwareMap.get(DcMotor.class, "guideRailMotor");
+
+        guideRailMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        linearSlide.setPower(gamepad2.left_stick_y);
+
+
+        if (linearSlide.getCurrentPosition() > 3300){
+            linearSlide.setPower(0);
+        }
+
 
 
         // wait for the start button to be pressed.
@@ -44,17 +60,20 @@ public class ArmTouchSensor extends LinearOpMode {
             linearSlide.setPower(gamepad2.left_stick_y);
 
             // send the info back to driver station using telemetry function.
-            if (touchSensor.isPressed()) {
-                if (linearSlide.getCurrentPosition() > 1000 || linearSlide.getCurrentPosition() > -1000){
+//            if (guideRailMotor.getCurrentPosition() > 1000){
+//                linearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            }
+
+                if (linearSlide.getCurrentPosition() > -1700) {
+                    linearSlide.setPower(0);
                     linearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
                 }
-                telemetry.addData("Touch Sensor", "Is Pressed");
-            } else {
 
-                telemetry.addData("Touch Sensor", "Is Not Pressed");
-            }
-
+            telemetry.addData("Touch Sensor", "Is Pressed");
+            telemetry.addData("Linear Slide Ticks: ", linearSlide.getCurrentPosition());
             telemetry.update();
         }
+
     }
 }
